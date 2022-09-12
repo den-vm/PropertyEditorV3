@@ -477,6 +477,7 @@ namespace PropertyEditor
             saveAsToolStripMenuItem.Enabled = false;
             tvFolders.Nodes.Clear();
             lvDataItems.Items.Clear();
+            listBox1.Items.Clear();
             pbTotal.Value = 0;
             button1.Enabled = false;
             HeaderManager._header = new Header();
@@ -504,6 +505,7 @@ namespace PropertyEditor
             var text = textBox1.Text.Trim().ToLower();
             if (text.Length > 0)
             {
+                listBox1.Items.Clear();
                 var cloneObjects = ObjectsManager._objects;
                 var foundObjects = cloneObjects.FindAll(x =>
                     (x.Keys.NationsCount > 0
