@@ -461,7 +461,7 @@ namespace PropertyEditor
 
         private void creditsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Copyright © Exploit Network 2021\nDevelopers: Coyote, PISTOLA", Application.ProductName);
+            MessageBox.Show("Copyright © Exploit Network 2021 and SITD 2022\nDevelopers: Coyote, PISTOLA, den-vm", Application.ProductName);
         }
 
         private void FullClear()
