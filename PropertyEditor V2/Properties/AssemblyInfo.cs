@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("PropertyEditor V2")]
 [assembly: AssemblyDescription("PointBlank Property Editor")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Exploit Network")]
+[assembly: AssemblyCompany("Exploit Network and SITD")]
 [assembly: AssemblyProduct("PropertyEditor V2")]
-[assembly: AssemblyCopyright("Copyright © Exploit Network 2020")]
+[assembly: AssemblyCopyright("Copyright © Exploit Network 2020 and SITD 2022")]
 [assembly: AssemblyTrademark("Exploit Network")]
 [assembly: AssemblyCulture("")]
 

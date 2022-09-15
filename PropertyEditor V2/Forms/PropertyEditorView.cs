@@ -1,10 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DevExpress.Utils;
+using DevExpress.Utils.Localization;
+using DevExpress.XtraEditors.Controls;
+using DevExpress.XtraGrid.Columns;
+using DevExpress.XtraGrid.Localization;
+using DevExpress.XtraGrid.Views.Grid;
+using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using PropertyEditor.Managers;
 using PropertyEditor.Models;
 using PropertyEditor.Models.Enums;
@@ -29,6 +37,7 @@ namespace PropertyEditor
             Console.WriteLine("Waiting for load file...");
             lbNation.Text = "Lang client: " + Settings.Nation;
             Console.WriteLine("Nation Selected: {0} idx: {1}", Settings.Nation, (int)Settings.Nation);
+            ActiveControl = treePefFolders;
         }
 
 
@@ -117,7 +126,7 @@ namespace PropertyEditor
                     }
                 }
 
-                lbPath.Text = ofdPefSelector.FileName;
+                path_i3Pack.Text = ofdPefSelector.FileName;
                 Console.WriteLine("Path file " + ofdPefSelector.FileName);
                 Console.WriteLine("Loading file...");
                 var buffer = File.ReadAllBytes(ofdPefSelector.FileName);
@@ -457,7 +466,7 @@ namespace PropertyEditor
         private void FullClear()
         {
             Console.WriteLine("Cleaning all old info...");
-            lbPath.Text = "None";
+            path_i3Pack.Text = "None";
             isEnvSet = false;
             detailComponentPef.Enabled = false;
             treePefFolders.Enabled = false;
@@ -467,7 +476,7 @@ namespace PropertyEditor
             saveAsToolStripMenuItem.Enabled = false;
             treePefFolders.Nodes.Clear();
             detailComponentPef.Items.Clear();
-            listBox_ResultFind.Items.Clear();
+            gridControl1.DataSource = null;
             pbTotal.Value = 0;
             button1.Enabled = false;
             HeaderManager._header = new Header();
@@ -492,10 +501,10 @@ namespace PropertyEditor
 
         private void button1_Click(object sender, EventArgs e)
         {
+            gridControl1.DataSource = null;
             var text = textBox1.Text.Trim().ToLower();
             if (text.Length > 0)
             {
-                listBox_ResultFind.Items.Clear();
                 var cloneObjects = ObjectsManager._objects;
                 var foundObjects = cloneObjects.FindAll(x =>
                     (x.Keys.NationsCount > 0
@@ -514,10 +523,28 @@ namespace PropertyEditor
                 }
 
                 var collectionListBoxObject =
-                    getTreeNodeFoundObjects.Select(x => $"{x.FullPath} [Id = {x.Name}]").ToArray();
+                    getTreeNodeFoundObjects.Select(x => $"{x.FullPath.Replace(@"\", " -> ")}\t[Id = {x.Name}]").ToArray();
+                if (getTreeNodeFoundObjects.Count != 0)
+                {
+                    var dataTable = new DataTable("ResultFind");
+                    dataTable.Columns.AddRange(new[]
+                    {
+                        new DataColumn("ID"),
+                        new DataColumn("Name"), 
+                        new DataColumn("Path")
+                    });
 
-                listBox_ResultFind.Items.AddRange(collectionListBoxObject);
-
+                    foreach (var nodeElem in getTreeNodeFoundObjects)
+                    {
+                        var row = dataTable.NewRow();
+                        row["ID"] = nodeElem.Name;
+                        row["Name"] = nodeElem.Text;
+                        row["Path"] = nodeElem.FullPath;
+                        dataTable.Rows.Add(row);
+                    }
+                    gridControl1.DataSource = dataTable;
+                }
+                
                 Console.WriteLine("Founded items: {0}", getTreeNodeFoundObjects.Count);
                 lbFoundNodes.Text = string.Format("Search: {0} items found.", getTreeNodeFoundObjects.Count);
             }
@@ -665,21 +692,34 @@ namespace PropertyEditor
             }
         }
 
-        private void listBox1_DoubleClick(object sender, EventArgs e)
+        private void addItemPef_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var selectedName = listBox_ResultFind.SelectedItem.ToString();
-            var id = selectedName.Split('=')[1].Replace("]", "").Trim(' ');
-            var node = treePefFolders.Nodes.Find(id, true);
+            MessageBox.Show("In development...", Application.ProductName);
+        }
+
+        private void gridView1_DoubleClick(object sender, EventArgs e)
+        {
+            var ea = e as DXMouseEventArgs;
+            var view = sender as GridView;
+            var info = view.CalcHitInfo(ea.Location);
+
+            if (!info.InRow && !info.InRowCell) 
+                return;
+
+            var node = treePefFolders.Nodes.Find(gridView1.GetFocusedDataRow()["ID"].ToString(), true);
             if (node.Length == 1)
+            {
                 treePefFolders.SelectedNode = node[0];
+                treePefFolders.Focus();
+            }
             else
                 MessageBox.Show(@"No or more than one ID value was found for the selected item", @"Error view node",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void addItemPef_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void gridControl1_DataSourceChanged(object sender, EventArgs e)
         {
-            MessageBox.Show("In development...", Application.ProductName);
+            gridView1.BestFitColumns();
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
