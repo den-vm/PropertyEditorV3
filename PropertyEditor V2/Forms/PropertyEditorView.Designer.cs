@@ -43,8 +43,7 @@
             this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treePefFolders = new System.Windows.Forms.TreeView();
             this.cmsEditTreeView = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.infosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dumpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.infosPef_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.detailComponentPef = new System.Windows.Forms.ListView();
             this.Id = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ItemName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -66,6 +65,7 @@
             this.lbFoundNodes = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.addItemPef_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.msTool.SuspendLayout();
             this.cmsEditTreeView.SuspendLayout();
             this.cmsEditListView.SuspendLayout();
@@ -182,24 +182,17 @@
             // cmsEditTreeView
             // 
             this.cmsEditTreeView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.infosToolStripMenuItem,
-            this.dumpToolStripMenuItem});
+            this.infosPef_ToolStripMenuItem,
+            this.addItemPef_ToolStripMenuItem});
             this.cmsEditTreeView.Name = "cmsEditTreeView";
-            this.cmsEditTreeView.Size = new System.Drawing.Size(152, 48);
+            this.cmsEditTreeView.Size = new System.Drawing.Size(149, 48);
             // 
-            // infosToolStripMenuItem
+            // infosPef_ToolStripMenuItem
             // 
-            this.infosToolStripMenuItem.Name = "infosToolStripMenuItem";
-            this.infosToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
-            this.infosToolStripMenuItem.Text = "Info item";
-            this.infosToolStripMenuItem.Click += new System.EventHandler(this.infosToolStripMenuItem_Click);
-            // 
-            // dumpToolStripMenuItem
-            // 
-            this.dumpToolStripMenuItem.Name = "dumpToolStripMenuItem";
-            this.dumpToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
-            this.dumpToolStripMenuItem.Text = "Dump in JSON";
-            this.dumpToolStripMenuItem.Click += new System.EventHandler(this.dumpToolStripMenuItem_Click);
+            this.infosPef_ToolStripMenuItem.Name = "infosPef_ToolStripMenuItem";
+            this.infosPef_ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.infosPef_ToolStripMenuItem.Text = "Info item";
+            this.infosPef_ToolStripMenuItem.Click += new System.EventHandler(this.infosToolStripMenuItem_Click);
             // 
             // detailComponentPef
             // 
@@ -399,6 +392,13 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Copyright © Exploit Network 2021 and SITD 2022";
             // 
+            // addItemPef_ToolStripMenuItem
+            // 
+            this.addItemPef_ToolStripMenuItem.Name = "addItemPef_ToolStripMenuItem";
+            this.addItemPef_ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.addItemPef_ToolStripMenuItem.Text = "Add new item";
+            this.addItemPef_ToolStripMenuItem.Click += new System.EventHandler(this.addItemPef_ToolStripMenuItem_Click);
+            // 
             // PropertyEditorView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -454,10 +454,9 @@
         private System.Windows.Forms.ContextMenuStrip cmsEditListView;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem1;
         private System.Windows.Forms.ContextMenuStrip cmsEditTreeView;
-        private System.Windows.Forms.ToolStripMenuItem dumpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem creditsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem infosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem infosPef_ToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.StatusStrip statusStrip1;
@@ -472,6 +471,7 @@
         private System.Windows.Forms.ToolStripMenuItem ferramentasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem desbloquearScriptToolStripMenuItem1;
         private System.Windows.Forms.ListBox listBox_ResultFind;
+        private System.Windows.Forms.ToolStripMenuItem addItemPef_ToolStripMenuItem;
     }
 }
 

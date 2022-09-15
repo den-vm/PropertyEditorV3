@@ -398,16 +398,6 @@ namespace PropertyEditor
             }
         }
 
-        private void dumpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Coming soon...", Application.ProductName);
-            //Objects objNode = ObjectManager.GetObjectById(ulong.Parse(treeView1.SelectedNode.Name));
-            //if (objNode.Keys.IsFolder)
-            //{
-            //    // dump items, folders and subitems
-            //}
-        }
-
         private void infosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var obj = ObjectsManager.GetObjectById(ulong.Parse(treePefFolders.SelectedNode.Name));
@@ -685,6 +675,11 @@ namespace PropertyEditor
             else
                 MessageBox.Show(@"No or more than one ID value was found for the selected item", @"Error view node",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void addItemPef_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("In development...", Application.ProductName);
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
