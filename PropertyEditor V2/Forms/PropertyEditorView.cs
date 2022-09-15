@@ -36,20 +36,20 @@ namespace PropertyEditor
         {
             if (WindowState == FormWindowState.Maximized)
             {
-                lvDataItems.Columns[0].Width = 120;
-                lvDataItems.Columns[1].Width = 200;
-                lvDataItems.Columns[2].Width = 130;
-                lvDataItems.Columns[3].Width = 150;
-                lvDataItems.Columns[4].Width = 400;
+                detailComponentPef.Columns[0].Width = 120;
+                detailComponentPef.Columns[1].Width = 200;
+                detailComponentPef.Columns[2].Width = 130;
+                detailComponentPef.Columns[3].Width = 150;
+                detailComponentPef.Columns[4].Width = 400;
             }
 
             if (WindowState == FormWindowState.Normal)
             {
-                lvDataItems.Columns[0].Width = 98;
-                lvDataItems.Columns[1].Width = 113;
-                lvDataItems.Columns[2].Width = 124;
-                lvDataItems.Columns[3].Width = 107;
-                lvDataItems.Columns[4].Width = 121;
+                detailComponentPef.Columns[0].Width = 98;
+                detailComponentPef.Columns[1].Width = 113;
+                detailComponentPef.Columns[2].Width = 124;
+                detailComponentPef.Columns[3].Width = 107;
+                detailComponentPef.Columns[4].Width = 121;
             }
         }
 
@@ -156,8 +156,8 @@ namespace PropertyEditor
             pbTotal.Value = 0;
             var registryRoot = ObjectsManager.GetRegistryRoot();
             pbTotal.Maximum = ObjectsManager._objects.Count;
-            tvFolders.BeginUpdate();
-            var tds = tvFolders.Nodes.Add(registryRoot.Id.ToString(), registryRoot.Keys.Name);
+            treePefFolders.BeginUpdate();
+            var tds = treePefFolders.Nodes.Add(registryRoot.Id.ToString(), registryRoot.Keys.Name);
             LoadFiles(registryRoot, tds);
             LoadSubDirectories(registryRoot, tds);
         }
@@ -168,9 +168,9 @@ namespace PropertyEditor
                 Task.Run(() =>
                 {
                     var file = ObjectsManager.GetObjectById(id);
-                    if (tvFolders.InvokeRequired)
+                    if (treePefFolders.InvokeRequired)
                     {
-                        tvFolders.Invoke(new Action(() =>
+                        treePefFolders.Invoke(new Action(() =>
                         {
                             var tds = td.Nodes.Add(file.Id.ToString(), file.Keys.Name);
                             UpdateProgress();
@@ -190,9 +190,9 @@ namespace PropertyEditor
                 Task.Run(() =>
                 {
                     var folder = ObjectsManager.GetObjectById(id);
-                    if (tvFolders.InvokeRequired)
+                    if (treePefFolders.InvokeRequired)
                     {
-                        tvFolders.Invoke(new Action(() =>
+                        treePefFolders.Invoke(new Action(() =>
                         {
                             var tds = td.Nodes.Add(folder.Id.ToString(), folder.Keys.Name);
                             LoadFiles(folder, tds);
@@ -215,10 +215,10 @@ namespace PropertyEditor
             if (pbTotal.Value + 2 >= pbTotal.Maximum)
             {
                 pbTotal.Value += 2;
-                tvFolders.Sort();
-                tvFolders.EndUpdate();
-                tvFolders.Enabled = true;
-                lvDataItems.Enabled = true;
+                treePefFolders.Sort();
+                treePefFolders.EndUpdate();
+                treePefFolders.Enabled = true;
+                detailComponentPef.Enabled = true;
                 button1.Enabled = false;
                 textBox1.Enabled = true;
                 saveToolStripMenuItem.Enabled = true;
@@ -241,8 +241,8 @@ namespace PropertyEditor
         private void tvFolders_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if (string.IsNullOrEmpty(e.Node.Name)) return;
-            lvDataItems.BeginUpdate();
-            lvDataItems.Items.Clear();
+            detailComponentPef.BeginUpdate();
+            detailComponentPef.Items.Clear();
             //MessageBox.Show(e.Node.Name);
             var obj = ObjectsManager.GetObjectById(ulong.Parse(e.Node.Name));
             if (obj != null)
@@ -275,7 +275,7 @@ namespace PropertyEditor
                         objIdView.SubItems.Add(objTypeView);
                         objIdView.SubItems.Add(objValueTypeView);
                         objIdView.SubItems.Add(objValueView);
-                        lvDataItems.Items.Add(objIdView);
+                        detailComponentPef.Items.Add(objIdView);
                     }
                 }
                 else
@@ -296,11 +296,11 @@ namespace PropertyEditor
                     objIdView.SubItems.Add(objTypeView);
                     objIdView.SubItems.Add(objValueTypeView);
                     objIdView.SubItems.Add(objValueView);
-                    lvDataItems.Items.Add(objIdView);
+                    detailComponentPef.Items.Add(objIdView);
                 }
             }
 
-            lvDataItems.EndUpdate();
+            detailComponentPef.EndUpdate();
         }
 
         public void SetProgressBarValue(long receive, long total)
@@ -321,7 +321,7 @@ namespace PropertyEditor
 
         private void fileToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            var obj = ObjectsManager.GetObjectById(ulong.Parse(lvDataItems.FocusedItem.Text));
+            var obj = ObjectsManager.GetObjectById(ulong.Parse(detailComponentPef.FocusedItem.Text));
             if (obj != null)
             {
                 if (obj.Keys.IsFolder)
@@ -330,10 +330,10 @@ namespace PropertyEditor
                 {
                     if (edit.ShowDialog() == DialogResult.OK)
                     {
-                        lvDataItems.BeginUpdate();
-                        lvDataItems.Items.Clear();
+                        detailComponentPef.BeginUpdate();
+                        detailComponentPef.Items.Clear();
                         //MessageBox.Show(e.Node.Name);
-                        var objNode = ObjectsManager.GetObjectById(ulong.Parse(tvFolders.SelectedNode.Name));
+                        var objNode = ObjectsManager.GetObjectById(ulong.Parse(treePefFolders.SelectedNode.Name));
                         if (objNode != null)
                         {
                             if (objNode.Keys.IsFolder)
@@ -364,7 +364,7 @@ namespace PropertyEditor
                                     objIdView.SubItems.Add(objTypeView);
                                     objIdView.SubItems.Add(objValueTypeView);
                                     objIdView.SubItems.Add(objValueView);
-                                    lvDataItems.Items.Add(objIdView);
+                                    detailComponentPef.Items.Add(objIdView);
                                 }
                             }
                             else
@@ -385,11 +385,11 @@ namespace PropertyEditor
                                 objIdView.SubItems.Add(objTypeView);
                                 objIdView.SubItems.Add(objValueTypeView);
                                 objIdView.SubItems.Add(objValueView);
-                                lvDataItems.Items.Add(objIdView);
+                                detailComponentPef.Items.Add(objIdView);
                             }
                         }
 
-                        lvDataItems.EndUpdate();
+                        detailComponentPef.EndUpdate();
                         MessageBox.Show(
                             (obj.Keys.Type == 9 ? obj.Keys.Nations[(int)Settings.Nation] : obj.Keys.Nations[0]) + "",
                             obj.GetNameTitle(), MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -410,7 +410,7 @@ namespace PropertyEditor
 
         private void infosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var obj = ObjectsManager.GetObjectById(ulong.Parse(tvFolders.SelectedNode.Name));
+            var obj = ObjectsManager.GetObjectById(ulong.Parse(treePefFolders.SelectedNode.Name));
             if (obj == null)
             {
                 MessageBox.Show("The object could not be loaded.", Application.ProductName);
@@ -469,15 +469,15 @@ namespace PropertyEditor
             Console.WriteLine("Cleaning all old info...");
             lbPath.Text = "None";
             isEnvSet = false;
-            lvDataItems.Enabled = false;
-            tvFolders.Enabled = false;
+            detailComponentPef.Enabled = false;
+            treePefFolders.Enabled = false;
             lbEncrypted.Text = "None";
             _encryptedPef = false;
             saveToolStripMenuItem.Enabled = false;
             saveAsToolStripMenuItem.Enabled = false;
-            tvFolders.Nodes.Clear();
-            lvDataItems.Items.Clear();
-            listBox1.Items.Clear();
+            treePefFolders.Nodes.Clear();
+            detailComponentPef.Items.Clear();
+            listBox_ResultFind.Items.Clear();
             pbTotal.Value = 0;
             button1.Enabled = false;
             HeaderManager._header = new Header();
@@ -505,7 +505,7 @@ namespace PropertyEditor
             var text = textBox1.Text.Trim().ToLower();
             if (text.Length > 0)
             {
-                listBox1.Items.Clear();
+                listBox_ResultFind.Items.Clear();
                 var cloneObjects = ObjectsManager._objects;
                 var foundObjects = cloneObjects.FindAll(x =>
                     (x.Keys.NationsCount > 0
@@ -518,7 +518,7 @@ namespace PropertyEditor
                 var getTreeNodeFoundObjects = new List<TreeNode>();
                 foreach (var obj in foundObjects)
                 {
-                    var findNode = tvFolders.Nodes.Find(obj.Id.ToString(), true);
+                    var findNode = treePefFolders.Nodes.Find(obj.Id.ToString(), true);
                     if (findNode.Length > 0)
                         getTreeNodeFoundObjects.AddRange(findNode);
                 }
@@ -526,7 +526,7 @@ namespace PropertyEditor
                 var collectionListBoxObject =
                     getTreeNodeFoundObjects.Select(x => $"{x.FullPath} [Id = {x.Name}]").ToArray();
 
-                listBox1.Items.AddRange(collectionListBoxObject);
+                listBox_ResultFind.Items.AddRange(collectionListBoxObject);
 
                 Console.WriteLine("Founded items: {0}", getTreeNodeFoundObjects.Count);
                 lbFoundNodes.Text = string.Format("Search: {0} items found.", getTreeNodeFoundObjects.Count);
@@ -677,11 +677,11 @@ namespace PropertyEditor
 
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
-            var selectedName = listBox1.SelectedItem.ToString();
+            var selectedName = listBox_ResultFind.SelectedItem.ToString();
             var id = selectedName.Split('=')[1].Replace("]", "").Trim(' ');
-            var node = tvFolders.Nodes.Find(id, true);
+            var node = treePefFolders.Nodes.Find(id, true);
             if (node.Length == 1)
-                tvFolders.SelectedNode = node[0];
+                treePefFolders.SelectedNode = node[0];
             else
                 MessageBox.Show(@"No or more than one ID value was found for the selected item", @"Error view node",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
