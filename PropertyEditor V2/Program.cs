@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace PropertyEditor
@@ -17,6 +19,8 @@ namespace PropertyEditor
             Utils.LoadSettings();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            var culture = CultureInfo.CreateSpecificCulture("en-EN");
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
             _propertyEditor = new PropertyEditorView();
             Application.Run(_propertyEditor);
         }
