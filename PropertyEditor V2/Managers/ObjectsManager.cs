@@ -216,7 +216,7 @@ namespace PropertyEditor.Managers
 
         public static void SetOffsets(BinaryWriter bw)
         {
-            Console.WriteLine("Setting new offsets {0}/{1}...", _changeOffsets.Count, _objects.Count);
+            Console.WriteLine(@"Setting new offsets {0}/{1}...", _changeOffsets.Count, _objects.Count);
             int i = 0;
             foreach (KeyValuePair<ulong, ulong> item in _changeOffsets)
             {

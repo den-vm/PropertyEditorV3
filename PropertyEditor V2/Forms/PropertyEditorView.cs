@@ -36,7 +36,7 @@ namespace PropertyEditor
         {
             Console.WriteLine("Waiting for load file...");
             lbNation.Text = "Lang client: " + Settings.Nation;
-            Console.WriteLine("Nation Selected: {0} idx: {1}", Settings.Nation, (int)Settings.Nation);
+            Console.WriteLine(@"Nation Selected: {0} idx: {1}", Settings.Nation, (int)Settings.Nation);
             ActiveControl = treePefFolders;
         }
 
@@ -340,7 +340,7 @@ namespace PropertyEditor
             {
                 if (obj.Keys.IsFolder)
                     return;
-                using (var edit = new EditView(obj, (int)Settings.Nation))
+                using (var edit = new EditView(obj, (int)Settings.Nation, "item"))
                 {
                     if (edit.ShowDialog() == DialogResult.OK)
                     {
@@ -680,15 +680,15 @@ namespace PropertyEditor
             {
                 if (obj.Keys.IsRegistryRoot || treePefFolders.SelectedNode.Parent.Text == @"RegistryRoot")
                     return;
-                using (var edit = new EditView(obj, (int)Settings.Nation))
+                using (var edit = new EditView(obj, (int)Settings.Nation, "folder"))
                 {
                     if (edit.ShowDialog() == DialogResult.OK)
                     {
                         treePefFolders.BeginUpdate();
                         detailComponentPef.BeginUpdate();
                         detailComponentPef.Items.Clear();
-                        treePefFolders.SelectedNode.Name = edit.obj.Id.ToString();
-                        treePefFolders.SelectedNode.Text = edit.obj.Keys.Name;
+                        treePefFolders.SelectedNode.Name = edit.Obj.Id.ToString();
+                        treePefFolders.SelectedNode.Text = edit.Obj.Keys.Name;
                         UpdateTreeView(obj);
                         treePefFolders.EndUpdate();
                         detailComponentPef.EndUpdate();

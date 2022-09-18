@@ -216,28 +216,28 @@
             this.cmsEditTreeView.Name = "cmsEditTreeView";
             this.cmsEditTreeView.ShowImageMargin = false;
             this.cmsEditTreeView.ShowItemToolTips = false;
-            this.cmsEditTreeView.Size = new System.Drawing.Size(154, 70);
+            this.cmsEditTreeView.Size = new System.Drawing.Size(124, 70);
             this.cmsEditTreeView.TabStop = true;
             // 
             // infosPef_ToolStripMenuItem
             // 
             this.infosPef_ToolStripMenuItem.Name = "infosPef_ToolStripMenuItem";
-            this.infosPef_ToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.infosPef_ToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.infosPef_ToolStripMenuItem.Text = "Info item";
             this.infosPef_ToolStripMenuItem.Click += new System.EventHandler(this.infosToolStripMenuItem_Click);
             // 
             // addItemPef_ToolStripMenuItem
             // 
             this.addItemPef_ToolStripMenuItem.Name = "addItemPef_ToolStripMenuItem";
-            this.addItemPef_ToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.addItemPef_ToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.addItemPef_ToolStripMenuItem.Text = "Add new item";
             this.addItemPef_ToolStripMenuItem.Click += new System.EventHandler(this.addItemPef_ToolStripMenuItem_Click);
             // 
             // renameItemPef_ToolStripMenuItem
             // 
             this.renameItemPef_ToolStripMenuItem.Name = "renameItemPef_ToolStripMenuItem";
-            this.renameItemPef_ToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.renameItemPef_ToolStripMenuItem.Text = "Rename item folder";
+            this.renameItemPef_ToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.renameItemPef_ToolStripMenuItem.Text = "Rename";
             this.renameItemPef_ToolStripMenuItem.Click += new System.EventHandler(this.renameItemPef_ToolStripMenuItem_Click);
             // 
             // detailComponentPef

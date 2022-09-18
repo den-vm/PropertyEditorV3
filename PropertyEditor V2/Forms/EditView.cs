@@ -8,79 +8,86 @@ namespace PropertyEditor
 {
     public partial class EditView : Form
     {
-        public Objects obj;
-        public int nation;
-        public EditView(Objects obj, int nation)
+        public Objects Obj;
+        public int Nation;
+        public string ClassItem;
+        public string OriginalValue;
+        public EditView(Objects obj, int nation, string classItem)
         {
             InitializeComponent();
-            this.obj = obj;
-            this.nation = nation;
+            this.Obj = obj;
+            this.Nation = nation;
+            this.ClassItem = classItem;
         }
 
         private void EditView_Load(object sender, EventArgs e)
         {
-            Text = string.Format("Edit - {0}", obj.Keys.Name);
+            Text = $@"Edit - {Obj.Keys.Name}";
             cbType.DataSource = Enum.GetValues(typeof(Models.Enums.ValueType));
-            txtValue.Text = obj.Keys.Nations.Count > 0 
-                ? obj.Keys.Nations[obj.Keys.Type == 9 ? nation : 0].ToString() 
-                : obj.Keys.Name;
-            cbType.Text = obj.Keys.IsFolder 
-                ? Models.Enums.ValueType.STRING.ToString() 
-                : ((Models.Enums.ValueType)obj.Keys.ValueType).ToString();
+            switch (ClassItem)
+            {
+                case "item":
+                    txtValue.Text = Obj.Keys.Nations[Obj.Keys.Type == 9 ? Nation : 0].ToString();
+                    OriginalValue = Obj.Keys.Nations[Obj.Keys.Type == 9 ? Nation : 0].ToString();
+                    cbType.Text = ((Models.Enums.ValueType)Obj.Keys.ValueType).ToString();
+                    break;
+                case "folder":
+                    txtValue.Text = Obj.Keys.Name;
+                    OriginalValue = Obj.Keys.Name;
+                    cbType.Text = Models.Enums.ValueType.STRING.ToString();
+                    break;
+            }
         }
 
         private void btSave_Click(object sender, EventArgs e)
         {
             btSave.Enabled = false;
-            var lastValue = obj.Keys.Nations.Count > 0 
-                ? obj.Keys.Nations[obj.Keys.Type == 9 ? nation : 0].ToString()
-                : obj.Keys.Name;
-            if (lastValue.Equals(txtValue.Text))
+            if (OriginalValue.Equals(txtValue.Text))
             {
                 Close();
                 return;
             }
-            obj.Keys.ValueType = obj.Keys.IsFolder 
-                ? obj.Keys.ValueType 
-                : cbType.SelectedIndex; //change new value type
-            var oldSize = obj.Size;
-            if(obj.Keys.ValueType == 2) //STRING UNICODE MULTIPLIES FOR 2
+            Obj.Keys.ValueType = ClassItem == "item" 
+                ? cbType.SelectedIndex 
+                : Obj.Keys.ValueType; //change new value type
+            var oldSize = Obj.Size;
+            if(Obj.Keys.ValueType == 2) //STRING UNICODE MULTIPLIES FOR 2
             {
-                ulong diference = (ulong)((lastValue.ToString().Length * 2) - (txtValue.Text.ToString().Length * 2));
+                var diference = (ulong)((OriginalValue.Length * 2) - (txtValue.Text.Length * 2));
                 if (diference < 0)
                 {
-                    obj.Size += diference;
+                    Obj.Size += diference;
                 }
                 else if (diference > 0)
                 {
-                    obj.Size -= diference;
+                    Obj.Size -= diference;
                 }
             }
             else
             {
-                ulong diference = (ulong)((lastValue.ToString().Length) - (txtValue.Text.ToString().Length));
+                var diference = (ulong)((OriginalValue.Length) - (txtValue.Text.Length));
                 if (diference < 0)
                 {
-                    obj.Size += diference;
+                    Obj.Size += diference;
                 }
                 else if (diference > 0)
                 {
-                    obj.Size -= diference;
+                    Obj.Size -= diference;
                 }
             }
-            Console.WriteLine("Old Size:{0} New Size:{1}", oldSize, obj.Size);
-            if (obj.Keys.IsFolder)
-                obj.Keys.Name = txtValue.Text;
-            else 
-                obj.Keys.Nations[obj.Keys.Type == 9 ? nation : 0] = txtValue.Text; // change new value
+            Console.WriteLine(@"Old Size:{0} New Size:{1}", oldSize, Obj.Size);
+            if (ClassItem == "item") // change new value
+                Obj.Keys.Nations[Obj.Keys.Type == 9 ? Nation : 0] = txtValue.Text; 
+            else
+                Obj.Keys.Name = txtValue.Text;
 
-            if (!ObjectsManager._editSaved.ContainsKey(obj.Id))
+            if (!ObjectsManager._editSaved.ContainsKey(Obj.Id))
             {
-                ObjectsManager._editSaved.Add(obj.Id, obj);
+                ObjectsManager._editSaved.Add(Obj.Id, Obj);
             }
             else
             {
-                ObjectsManager._editSaved[obj.Id] = obj;
+                ObjectsManager._editSaved[Obj.Id] = Obj;
             }
             DialogResult = DialogResult.OK;
             Close();
@@ -88,10 +95,7 @@ namespace PropertyEditor
 
         private void txtValue_TextChanged(object sender, EventArgs e)
         {
-            var objValue = obj.Keys.Nations.Count > 0
-                ? obj.Keys.Nations[obj.Keys.Type == 9 ? nation : 0].ToString()
-                : obj.Keys.Name;
-            if (txtValue.Text == objValue)
+            if (txtValue.Text == OriginalValue)
             {
                 btSave.Enabled = false;
                 return;
