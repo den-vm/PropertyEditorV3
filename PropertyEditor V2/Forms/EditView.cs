@@ -21,20 +21,28 @@ namespace PropertyEditor
         {
             Text = string.Format("Edit - {0}", obj.Keys.Name);
             cbType.DataSource = Enum.GetValues(typeof(Models.Enums.ValueType));
-            txtValue.Text = obj.Keys.Nations[obj.Keys.Type == 9 ? nation : 0].ToString();
-            cbType.Text = ((Models.Enums.ValueType)obj.Keys.ValueType).ToString();
+            txtValue.Text = obj.Keys.Nations.Count > 0 
+                ? obj.Keys.Nations[obj.Keys.Type == 9 ? nation : 0].ToString() 
+                : obj.Keys.Name;
+            cbType.Text = obj.Keys.IsFolder 
+                ? Models.Enums.ValueType.STRING.ToString() 
+                : ((Models.Enums.ValueType)obj.Keys.ValueType).ToString();
         }
 
         private void btSave_Click(object sender, EventArgs e)
         {
             btSave.Enabled = false;
-            var lastValue = obj.Keys.Nations[obj.Keys.Type == 9 ? nation : 0];
+            var lastValue = obj.Keys.Nations.Count > 0 
+                ? obj.Keys.Nations[obj.Keys.Type == 9 ? nation : 0].ToString()
+                : obj.Keys.Name;
             if (lastValue.Equals(txtValue.Text))
             {
                 Close();
                 return;
             }
-            obj.Keys.ValueType = cbType.SelectedIndex; //change new value type
+            obj.Keys.ValueType = obj.Keys.IsFolder 
+                ? obj.Keys.ValueType 
+                : cbType.SelectedIndex; //change new value type
             var oldSize = obj.Size;
             if(obj.Keys.ValueType == 2) //STRING UNICODE MULTIPLIES FOR 2
             {
@@ -61,7 +69,11 @@ namespace PropertyEditor
                 }
             }
             Console.WriteLine("Old Size:{0} New Size:{1}", oldSize, obj.Size);
-            obj.Keys.Nations[obj.Keys.Type == 9 ? nation : 0] = txtValue.Text; // change new value
+            if (obj.Keys.IsFolder)
+                obj.Keys.Name = txtValue.Text;
+            else 
+                obj.Keys.Nations[obj.Keys.Type == 9 ? nation : 0] = txtValue.Text; // change new value
+
             if (!ObjectsManager._editSaved.ContainsKey(obj.Id))
             {
                 ObjectsManager._editSaved.Add(obj.Id, obj);
@@ -76,7 +88,10 @@ namespace PropertyEditor
 
         private void txtValue_TextChanged(object sender, EventArgs e)
         {
-            if (txtValue.Text == obj.Keys.Nations[obj.Keys.Type == 9 ? nation : 0].ToString())
+            var objValue = obj.Keys.Nations.Count > 0
+                ? obj.Keys.Nations[obj.Keys.Type == 9 ? nation : 0].ToString()
+                : obj.Keys.Name;
+            if (txtValue.Text == objValue)
             {
                 btSave.Enabled = false;
                 return;

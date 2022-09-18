@@ -328,6 +328,11 @@ namespace PropertyEditor
         {
         }
 
+        /// <summary>
+        /// Changed item in folder
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void fileToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             var obj = ObjectsManager.GetObjectById(ulong.Parse(detailComponentPef.FocusedItem.Text));
@@ -341,67 +346,8 @@ namespace PropertyEditor
                     {
                         detailComponentPef.BeginUpdate();
                         detailComponentPef.Items.Clear();
-                        //MessageBox.Show(e.Node.Name);
-                        var objNode = ObjectsManager.GetObjectById(ulong.Parse(treePefFolders.SelectedNode.Name));
-                        if (objNode != null)
-                        {
-                            if (objNode.Keys.IsFolder)
-                            {
-                                var items = new List<Objects>();
-                                foreach (var id in objNode.Keys.Items)
-                                {
-                                    var file = ObjectsManager.GetObjectById(id);
-                                    items.Add(file);
-                                }
-
-                                var ascending = items.OrderBy(x => x.Keys.Name); //list in crescent order
-                                foreach (var file in ascending)
-                                {
-                                    var objIdView = new ListViewItem();
-                                    objIdView.Text = file.Id.ToString();
-                                    var objNameView = new ListViewSubItem();
-                                    objNameView.Text = file.Keys.Name;
-                                    var objTypeView = new ListViewSubItem();
-                                    objTypeView.Text = file.Type.ToString();
-                                    var objValueTypeView = new ListViewSubItem();
-                                    objValueTypeView.Text = ((ValueType)file.Keys.ValueType).ToString();
-                                    var objValueView = new ListViewSubItem();
-                                    objValueView.Text = file.Keys.Type == 9
-                                        ? file.Keys.Nations[(int)Settings.Nation].ToString()
-                                        : file.Keys.Nations[0].ToString();
-                                    objIdView.SubItems.Add(objNameView);
-                                    objIdView.SubItems.Add(objTypeView);
-                                    objIdView.SubItems.Add(objValueTypeView);
-                                    objIdView.SubItems.Add(objValueView);
-                                    detailComponentPef.Items.Add(objIdView);
-                                }
-                            }
-                            else
-                            {
-                                var objIdView = new ListViewItem();
-                                objIdView.Text = objNode.Id.ToString();
-                                var objNameView = new ListViewSubItem();
-                                objNameView.Text = objNode.Keys.Name;
-                                var objTypeView = new ListViewSubItem();
-                                objTypeView.Text = objNode.Type.ToString();
-                                var objValueTypeView = new ListViewSubItem();
-                                objValueTypeView.Text = ((ValueType)objNode.Keys.ValueType).ToString();
-                                var objValueView = new ListViewSubItem();
-                                objValueView.Text = objNode.Keys.Type == 9
-                                    ? objNode.Keys.Nations[(int)Settings.Nation].ToString()
-                                    : objNode.Keys.Nations[0].ToString();
-                                objIdView.SubItems.Add(objNameView);
-                                objIdView.SubItems.Add(objTypeView);
-                                objIdView.SubItems.Add(objValueTypeView);
-                                objIdView.SubItems.Add(objValueView);
-                                detailComponentPef.Items.Add(objIdView);
-                            }
-                        }
-
+                        UpdateTreeView(obj);
                         detailComponentPef.EndUpdate();
-                        MessageBox.Show(
-                            (obj.Keys.Type == 9 ? obj.Keys.Nations[(int)Settings.Nation] : obj.Keys.Nations[0]) + "",
-                            obj.GetNameTitle(), MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
@@ -722,12 +668,106 @@ namespace PropertyEditor
             gridView1.BestFitColumns();
         }
 
+        /// <summary>
+        /// Changed folder
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void renameItemPef_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var obj = ObjectsManager.GetObjectById(ulong.Parse(treePefFolders.SelectedNode.Name));
+            if (obj != null)
+            {
+                if (obj.Keys.IsRegistryRoot || treePefFolders.SelectedNode.Parent.Text == @"RegistryRoot")
+                    return;
+                using (var edit = new EditView(obj, (int)Settings.Nation))
+                {
+                    if (edit.ShowDialog() == DialogResult.OK)
+                    {
+                        treePefFolders.BeginUpdate();
+                        detailComponentPef.BeginUpdate();
+                        detailComponentPef.Items.Clear();
+                        treePefFolders.SelectedNode.Name = edit.obj.Id.ToString();
+                        treePefFolders.SelectedNode.Text = edit.obj.Keys.Name;
+                        UpdateTreeView(obj);
+                        treePefFolders.EndUpdate();
+                        detailComponentPef.EndUpdate();
+                    }
+                }
+            }
+        }
+
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (textBox1.Text.Length > 0)
                 button1.Enabled = true;
             else
                 button1.Enabled = false;
+        }
+
+        /// <summary>
+        /// Update view in component TreeView
+        /// </summary>
+        /// <param name="obj">Item from Objects</param>
+        private void UpdateTreeView(Objects obj)
+        {
+            var objNode = ObjectsManager.GetObjectById(ulong.Parse(treePefFolders.SelectedNode.Name));
+            if (objNode != null)
+            {
+                if (objNode.Keys.IsFolder)
+                {
+                    var items = new List<Objects>();
+                    foreach (var id in objNode.Keys.Items)
+                    {
+                        var file = ObjectsManager.GetObjectById(id);
+                        items.Add(file);
+                    }
+
+                    var ascending = items.OrderBy(x => x.Keys.Name); //list in crescent order
+                    foreach (var file in ascending)
+                    {
+                        var objIdView = new ListViewItem();
+                        objIdView.Text = file.Id.ToString();
+                        var objNameView = new ListViewSubItem();
+                        objNameView.Text = file.Keys.Name;
+                        var objTypeView = new ListViewSubItem();
+                        objTypeView.Text = file.Type.ToString();
+                        var objValueTypeView = new ListViewSubItem();
+                        objValueTypeView.Text = ((ValueType)file.Keys.ValueType).ToString();
+                        var objValueView = new ListViewSubItem();
+                        objValueView.Text = file.Keys.Type == 9
+                            ? file.Keys.Nations[(int)Settings.Nation].ToString()
+                            : file.Keys.Nations[0].ToString();
+                        objIdView.SubItems.Add(objNameView);
+                        objIdView.SubItems.Add(objTypeView);
+                        objIdView.SubItems.Add(objValueTypeView);
+                        objIdView.SubItems.Add(objValueView);
+                        detailComponentPef.Items.Add(objIdView);
+                    }
+                }
+                else
+                {
+                    var objIdView = new ListViewItem();
+                    objIdView.Text = objNode.Id.ToString();
+                    var objNameView = new ListViewSubItem();
+                    objNameView.Text = objNode.Keys.Name;
+                    var objTypeView = new ListViewSubItem();
+                    objTypeView.Text = objNode.Type.ToString();
+                    var objValueTypeView = new ListViewSubItem();
+                    objValueTypeView.Text = ((ValueType)objNode.Keys.ValueType).ToString();
+                    var objValueView = new ListViewSubItem();
+                    objValueView.Text = objNode.Keys.Type == 9
+                        ? objNode.Keys.Nations[(int)Settings.Nation].ToString()
+                        : objNode.Keys.Nations[0].ToString();
+                    objIdView.SubItems.Add(objNameView);
+                    objIdView.SubItems.Add(objTypeView);
+                    objIdView.SubItems.Add(objValueTypeView);
+                    objIdView.SubItems.Add(objValueView);
+                    detailComponentPef.Items.Add(objIdView);
+                }
+            }
+
+            MessageBox.Show(@"Success", obj.GetNameTitle(), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
