@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyEditor V3", "PropertyEditor V2\PropertyEditor V3.csproj", "{FF00DFCB-BEF2-44B2-8B4B-A137A80EFBC7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyEditor V3", "PropertyEditor V3\PropertyEditor V3.csproj", "{FF00DFCB-BEF2-44B2-8B4B-A137A80EFBC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
